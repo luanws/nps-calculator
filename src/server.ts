@@ -1,6 +1,6 @@
 import express from 'express'
-import './database'
 import router from './routes'
+import './database'
 
 const app = express()
 app.use(express.json())
