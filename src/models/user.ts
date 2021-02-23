@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from "typeorm"
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 
-@Entity()
+@Entity('users')
 export default class User {
     @PrimaryColumn()
     readonly id!: string
@@ -12,10 +12,10 @@ export default class User {
     @Column()
     email!: string
 
-    @Column({ name: 'created_at' })
+    @Column({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
     createdAt!: Date
 
     constructor() {
-        if (!this.id) this.id = uuid.v4()
+        if (!this.id) this.id = uuid()
     }
 }
