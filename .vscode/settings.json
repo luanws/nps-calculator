@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
-        "typeorm"
+        "typeorm",
+        "varchar"
     ],
     "editor.tabSize": 4,
     "[json]": {
