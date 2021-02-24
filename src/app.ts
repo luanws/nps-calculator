@@ -2,7 +2,7 @@ import express from 'express'
 import router from './routes'
 import connectDatabase from './database'
 
-connectDatabase
+connectDatabase()
 
 const app = express()
 app.use(express.json())
