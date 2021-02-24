@@ -1,6 +1,6 @@
 import { Router } from "express"
-import SurveyController from "./controller/survey-controller"
-import UserController from "./controller/user-controller"
+import SurveyController from "./controllers/survey-controller"
+import UserController from "./controllers/user-controller"
 
 const router = Router()
 
