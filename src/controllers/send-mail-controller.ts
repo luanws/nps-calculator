@@ -28,12 +28,9 @@ export default class SendMailController {
             })
         }
 
-        const surveyUser = surveyUserRepository.create({
-            userId: user.id,
-            surveyId: surveyId
+        const surveyUserAlreadyExists = await surveyUserRepository.findOne({
+            where: [{ userId: user.id }, { value: null }]
         })
-
-        await surveyUserRepository.save(surveyUser)
 
         const templatePath = path.resolve(__dirname, '..', 'views', 'emails', 'npsMail.hbs')
         const templateArguments = {
@@ -41,7 +38,19 @@ export default class SendMailController {
             title: survey.title,
             description: survey.description,
             userId: user.id,
+            link: `${process.env.SERVER_ADDRESS}/answers`
         }
+
+        if (surveyUserAlreadyExists) {
+            await sendMailService.sendMail(email, survey.title, templatePath, templateArguments)
+            return response.json(surveyUserAlreadyExists)
+        }
+
+        const surveyUser = surveyUserRepository.create({
+            userId: user.id,
+            surveyId: surveyId
+        })
+        await surveyUserRepository.save(surveyUser)
         await sendMailService.sendMail(email, survey.title, templatePath, templateArguments)
 
         return response.json(surveyUser)
