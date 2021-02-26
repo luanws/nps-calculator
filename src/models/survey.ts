@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm"
 import { v4 as uuid } from 'uuid'
 
 @Entity('surveys')
@@ -12,7 +12,7 @@ export default class Survey {
     @Column()
     description!: string
 
-    @Column({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
+    @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date
 
     constructor() {
