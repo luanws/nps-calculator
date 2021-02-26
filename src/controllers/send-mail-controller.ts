@@ -3,6 +3,7 @@ import { getCustomRepository } from "typeorm"
 import SurveyRepository from "../repositories/survey-repository"
 import SurveyUserRepository from "../repositories/survey-user-repository"
 import UserRepository from "../repositories/user-repository"
+import sendMailService from "../services/send-mail-service"
 
 export default class SendMailController {
     async sendMail(request: Request, response: Response) {
@@ -32,7 +33,8 @@ export default class SendMailController {
         })
 
         await surveyUserRepository.save(surveyUser)
-
+        await sendMailService.sendMail(email, survey.title, survey.description)
+        
         return response.json(surveyUser)
     }
 }
