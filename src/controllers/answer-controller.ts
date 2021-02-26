@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { getCustomRepository } from "typeorm"
+import AppError from "../errors/app-error"
 import SurveyUserRepository from "../repositories/survey-user-repository"
 
 export class AnswerController {
@@ -9,9 +10,9 @@ export class AnswerController {
         const surveyUserRepository = getCustomRepository(SurveyUserRepository)
         const surveyUser = await surveyUserRepository.findOne({ id: surveyUserId })
 
-        if (!surveyUser) return response.status(400).json({
-            error: 'Survey User does not exists!'
-        })
+        if (!surveyUser) {
+            throw new AppError('Survey User does not exists')
+        }
 
         surveyUser.value = Number(value)
         await surveyUserRepository.save(surveyUser)

@@ -10,11 +10,7 @@ export default class UserController {
             email: yup.string().email('E-mail inválido').required('E-mail obrigatório')
         })
 
-        try {
-            await schema.validate(request.body, { abortEarly: false })
-        } catch (error) {
-            return response.status(400).json(error)
-        }
+        await schema.validate(request.body, { abortEarly: false })
 
         const { name, email } = request.body
 
