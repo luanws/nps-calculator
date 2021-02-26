@@ -4,6 +4,7 @@ import SurveyRepository from "../repositories/survey-repository"
 import SurveyUserRepository from "../repositories/survey-user-repository"
 import UserRepository from "../repositories/user-repository"
 import sendMailService from "../services/send-mail-service"
+import path from 'path'
 
 export default class SendMailController {
     async sendMail(request: Request, response: Response) {
@@ -12,14 +13,14 @@ export default class SendMailController {
         const userRepository = getCustomRepository(UserRepository)
         const surveyRepository = getCustomRepository(SurveyRepository)
         const surveyUserRepository = getCustomRepository(SurveyUserRepository)
-        
+
         const user = await userRepository.findOne({ email })
         if (!user) {
             return response.status(400).json({
                 error: 'User does not exists'
             })
         }
-        
+
         const survey = await surveyRepository.findOne({ id: surveyId })
         if (!survey) {
             return response.status(400).json({
@@ -33,8 +34,16 @@ export default class SendMailController {
         })
 
         await surveyUserRepository.save(surveyUser)
-        await sendMailService.sendMail(email, survey.title, survey.description)
-        
+
+        const templatePath = path.resolve(__dirname, '..', 'views', 'emails', 'npsMail.hbs')
+        const templateArguments = {
+            name: user.name,
+            title: survey.title,
+            description: survey.description,
+            userId: user.id,
+        }
+        await sendMailService.sendMail(email, survey.title, templatePath, templateArguments)
+
         return response.json(surveyUser)
     }
 }
