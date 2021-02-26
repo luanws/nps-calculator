@@ -38,7 +38,7 @@ export default class SendMailController {
             name: user.name,
             title: survey.title,
             description: survey.description,
-            userId: user.id,
+            id: surveyUserAlreadyExists?.id,
             link: `${process.env.SERVER_ADDRESS}/answers`
         }
 
@@ -52,6 +52,8 @@ export default class SendMailController {
             surveyId: surveyId
         })
         await surveyUserRepository.save(surveyUser)
+
+        templateArguments.id = surveyUser.id
         await sendMailService.sendMail(email, survey.title, templatePath, templateArguments)
 
         return response.json(surveyUser)
