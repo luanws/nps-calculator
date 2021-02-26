@@ -8,7 +8,7 @@ function errorHandler(error: Error, request: Request, response: Response, _next:
             error: error.message
         })
     } else if (error instanceof ValidationError) {
-        return response.status(400).json({ error })
+        return response.status(400).json(error)
     } else {
         return response.status(500).json({
             status: 'error',
