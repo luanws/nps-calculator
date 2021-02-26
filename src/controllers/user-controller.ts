@@ -23,7 +23,6 @@ export default class UserController {
             name,
             email
         })
-
         await userRepository.save(user)
 
         return response.status(201).json(user)
