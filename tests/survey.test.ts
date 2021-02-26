@@ -10,6 +10,12 @@ describe("/surveys", () => {
         await connection.runMigrations()
     })
 
+    afterAll(async () => {
+        const connection = await connectDatabase()
+        await connection.dropDatabase()
+        await connection.close()
+    })
+
     it('Criação de uma nova pesquisa', async () => {
         const response = await supertest(app).post('/surveys').send({
             title: 'Title example',

@@ -10,6 +10,12 @@ describe("/users", () => {
         await connection.runMigrations()
     })
 
+    afterAll(async () => {
+        const connection = await connectDatabase()
+        await connection.dropDatabase()
+        await connection.close()
+    })
+
     it('Criação de um novo usuário', async () => {
         const response = await supertest(app).post('/users').send({
             email: 'user@example.com',
